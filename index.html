@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My Planner</title>
+<meta name="theme-color" content="#05030f"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Planner">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark;
+--bg:#05030f;--card:rgba(20,13,52,.62);--tx:#ece8ff;--mu:#a99fd6;--pr:#b794ff;--ac:#4fd8ff;--pc:rgba(150,110,255,.2);--er:#ff7aa8;--ok:#6dffb3;--bd:rgba(160,130,255,.28);--glow:0 0 18px rgba(140,95,255,.35)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5;border-bottom:1px solid var(--bd)}
+h1{font-size:20px;margin:0;padding:12px 16px 4px}
+nav{display:flex;overflow-x:auto;gap:4px;padding:4px 12px 8px}
+nav button{flex:none;border:0;background:none;color:var(--mu);padding:8px 14px;border-radius:20px;font:inherit;cursor:pointer}
+nav button.on{background:var(--pc);color:var(--pr);font-weight:600}
+main{max-width:720px;margin:0 auto;padding:12px 16px 80px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px 12px;margin:8px 0}
+.row{display:flex;align-items:center;gap:8px}.sp{justify-content:space-between}.g{flex:1;min-width:0}
+.mu{color:var(--mu);font-size:13px}.er{color:var(--er)}.ok{color:var(--ok)}
+.done .t{text-decoration:line-through;opacity:.6}
+h2{font-size:17px;margin:18px 0 4px}
+input,textarea{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:8px;min-width:0}
+input[type=text],textarea{width:100%}input[type=checkbox]{width:22px;height:22px;accent-color:var(--pr)}
+button.b{font:inherit;border:1px solid var(--pr);background:var(--pr);color:var(--bg);border-radius:8px;padding:8px 14px;cursor:pointer}
+button.o{font:inherit;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:8px;padding:8px 12px;cursor:pointer}
+button.x{border:0;background:none;color:var(--er);font-size:20px;cursor:pointer;padding:4px 8px}
+.cur{background:var(--pc)}
+.form{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center}
+.cal div{border-radius:8px;padding:6px 0;min-height:46px;cursor:pointer;font-size:14px}
+.cal .h{cursor:default;min-height:0;color:var(--mu);font-size:12px}
+.cal .has{background:var(--card);border:1px solid var(--bd)}.cal .sel{background:var(--pc);border:1px solid var(--pr)}
+.cal .td b{color:var(--pr)}.cal small{display:block;font-size:10px;color:var(--mu)}
+.tabs{display:flex;gap:6px}.tabs button{flex:1}.tabs .on{background:var(--pc);border-color:var(--pr);color:var(--pr)}
+.warn{border-color:var(--er)}
+.med{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}.mi{width:84px;text-align:center}.mn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px}
+.th{width:84px;height:72px;border-radius:8px;background:var(--pc);display:flex;align-items:center;justify-content:center;font-size:30px;overflow:hidden;cursor:pointer}.th img{width:100%;height:100%;object-fit:cover}
+.sm{font-size:13px!important;padding:4px 10px!important;display:inline-block;margin-top:4px}
+#lb{position:fixed;inset:0;background:#000d;z-index:20;display:flex;align-items:center;justify-content:center;padding:16px}#lb[hidden]{display:none}#lb img,#lb video{max-width:100%;max-height:88vh}
+a{color:var(--pr)}
+
+html{scrollbar-color:#7c4dff transparent}
+::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:linear-gradient(#7c4dff,#18b6ff);border-radius:8px}
+body{font-family:"Exo 2",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-weight:400;
+ background:radial-gradient(ellipse at 12% 8%,rgba(120,60,255,.30),transparent 50%),radial-gradient(ellipse at 88% 32%,rgba(0,190,255,.16),transparent 55%),radial-gradient(ellipse at 50% 105%,rgba(255,60,160,.16),transparent 55%),var(--bg);background-attachment:fixed}
+h1,h2,nav button,button.b{font-family:Orbitron,"Exo 2",system-ui,sans-serif}
+header{background:rgba(5,3,15,.62);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd)}
+h1{font-size:22px;letter-spacing:3px;text-transform:uppercase;background:linear-gradient(90deg,#fff,var(--pr) 45%,var(--ac));-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 24px rgba(150,110,255,.4)}
+h1::before{content:"✦ ";-webkit-text-fill-color:var(--ac)}
+h2{font-size:14px;letter-spacing:2px;text-transform:uppercase;color:var(--ac)}
+nav button{font-size:12px;letter-spacing:1px;transition:.25s}nav button:hover{color:var(--tx)}
+nav button.on{color:#fff;background:linear-gradient(135deg,rgba(124,77,255,.55),rgba(24,182,255,.35));box-shadow:var(--glow)}
+.card{-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 4px 24px rgba(0,0,0,.35),inset 0 0 0 1px rgba(255,255,255,.03);transition:transform .25s,box-shadow .25s,border-color .25s}
+.card:hover{transform:translateY(-2px);border-color:rgba(190,160,255,.5);box-shadow:0 6px 28px rgba(0,0,0,.4),var(--glow)}
+button.b{background:linear-gradient(135deg,#7c4dff,#18b6ff);border:0;color:#08051a;font-weight:700;letter-spacing:1px;font-size:13px;box-shadow:0 0 16px rgba(80,140,255,.4);transition:.25s}
+button.b:hover{filter:brightness(1.15);box-shadow:0 0 26px rgba(80,180,255,.65)}
+button.o,label.o{background:rgba(255,255,255,.04);border:1px solid var(--bd);transition:.25s}button.o:hover,label.o:hover{border-color:var(--ac);box-shadow:0 0 14px rgba(79,216,255,.3)}
+.tabs .on{background:linear-gradient(135deg,rgba(124,77,255,.5),rgba(24,182,255,.3));border-color:var(--ac);color:#fff}
+input,textarea{background:rgba(255,255,255,.05)}input:focus,textarea:focus{outline:none;border-color:var(--ac);box-shadow:0 0 0 3px rgba(79,216,255,.2)}
+progress{accent-color:var(--ac);height:10px}
+.cur{background:linear-gradient(135deg,rgba(124,77,255,.35),rgba(24,182,255,.18));animation:pulse 3.2s ease-in-out infinite alternate}
+.cal .has{background:rgba(124,77,255,.12)}.cal .sel{box-shadow:var(--glow);background:linear-gradient(135deg,rgba(124,77,255,.5),rgba(24,182,255,.3))}
+.cal .td b{color:var(--ac);text-shadow:0 0 8px var(--ac)}
+#sky{position:fixed;inset:0;width:100%;height:100%;z-index:-2;pointer-events:none}
+.bh{position:fixed;top:-110px;right:-120px;width:340px;height:340px;z-index:-1;pointer-events:none;opacity:.65;will-change:transform}
+.bh i{position:absolute;inset:0;border-radius:50%;background:conic-gradient(#ff7a18,#ffd37a,#8a5cff,#18b6ff,#ff7a18);filter:blur(9px);animation:spin 16s linear infinite;-webkit-mask:radial-gradient(circle,transparent 36%,#000 41%,#000 58%,transparent 70%);mask:radial-gradient(circle,transparent 36%,#000 41%,#000 58%,transparent 70%)}
+.bh b{position:absolute;inset:33%;border-radius:50%;background:#000;box-shadow:0 0 36px 16px #000,0 0 70px 24px rgba(150,100,255,.35)}
+#sp{position:fixed;top:0;left:0;height:3px;width:0;z-index:40;background:linear-gradient(90deg,#7c4dff,#18b6ff,#ff5fa2);box-shadow:0 0 10px #7c4dff}
+main.fresh>*{animation:up .55s cubic-bezier(.2,.7,.2,1) both}
+@keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{to{box-shadow:0 0 26px rgba(124,77,255,.55)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head>
+<body>
+<canvas id="sky"></canvas><div class="bh"><i></i><b></b></div><div id="sp"></div>
+<header><button class="o" id="inst" data-a="inst" hidden style="position:absolute;right:12px;top:10px;font-size:12px;padding:4px 10px;z-index:2">📲 Install</button><h1>My Planner</h1><nav id="nav"></nav></header>
+<main id="m"></main><div id="lb" hidden></div>
+<script>
+const E=()=>({routine:[],dayPlans:[],tasks:[],subjects:[],homework:[],notes:[],trash:[]});
+const p=n=>String(n).padStart(2,'0'),iso=d=>d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate());
+const fm=m=>p(Math.floor(m/60))+':'+p(m%60),tm=s=>{const a=s.split(':');return +a[0]*60+ +a[1]};
+const uid=()=>Math.random().toString(36).slice(2)+Date.now().toString(36);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const dl=s=>Math.round((new Date(s+'T00:00:00')-new Date(iso(new Date())+'T00:00:00'))/864e5);
+const left=n=>n<0?`overdue by ${-n} day(s)`:n==0?'due TODAY':`${n} day(s) left`;
+let S;try{S=Object.assign(E(),JSON.parse(localStorage.getItem('planner')||'{}'))}catch(e){S=E()}
+const save=()=>{try{localStorage.setItem('planner',JSON.stringify(Object.assign({version:1},S)))}catch(e){}mirror()};
+// copy of open deadlines for the background service worker (it cannot read localStorage)
+const mirror=()=>{try{const it=S.homework.filter(h=>!h.done).map(h=>({t:h.title,d:h.due})).concat(S.dayPlans.filter(x=>!x.done).map(x=>({t:x.title,d:x.date}))),r=indexedDB.open('planner_sw',1);
+ r.onupgradeneeded=()=>r.result.createObjectStore('k');r.onsuccess=()=>{try{r.result.transaction('k','readwrite').objectStore('k').put(it,'items')}catch(e){}}}catch(e){}};
+let tab='today',U={ym:new Date(),sel:iso(new Date()),sc:0,an:new Date(),edit:null,pend:null,msg:''};
+const PRESETS=['Math','Science','Biology','Chemistry','Physics','Social Studies','History','Geography','English','Literature','Computer','Art','Music','PE'];
+const TABS=[['today','Today'],['routine','Routine'],['cal','Calendar'],['tasks','Tasks'],['hw','Homework'],['notes','Notes'],['trash','Trash'],['bk','Backup']];
+{const q=new URLSearchParams(location.search).get('tab');if(TABS.some(t=>t[0]==q))tab=q}
+
+// routine helpers (same logic as the Android app)
+const cov=(b,m)=>b.endMin>b.startMin?m>=b.startMin&&m<b.endMin:(m>=b.startMin||m<b.endMin);
+const ivs=b=>b.endMin>b.startMin?[[b.startMin,b.endMin]]:[[b.startMin,1440]].concat(b.endMin>0?[[0,b.endMin]]:[]);
+const ovl=(a,b)=>ivs(a).some(x=>ivs(b).some(y=>x[0]<y[1]&&y[0]<x[1]));
+function free(bl){const iv=[].concat(...bl.map(ivs)).sort((a,b)=>a[0]-b[0]),r=[];let c=0;
+ for(const[s,e]of iv){if(s>c)r.push([c,s]);if(e>c)c=e}if(c<1440)r.push([c,1440]);return r}
+
+function row(done,title,sub,warn,kind,id,del,extra){
+ return `<div class="card row ${done?'done':''}"><input type="checkbox" ${done?'checked':''} data-a="tg" data-k="${kind}" data-i="${id}">
+ <div class="g"><div class="t">${esc(title)}</div>${sub?`<div class="mu ${warn?'er':''}">${esc(sub)}</div>`:''}${extra||''}</div>
+ ${del?`<button class="x" data-a="del" data-k="${kind}" data-i="${id}" aria-label="Delete">×</button>`:''}</div>`}
+
+function soon(){const sb=Object.fromEntries(S.subjects.map(s=>[s.id,s.name]));
+ return S.homework.filter(h=>!h.done).map(h=>({k:'homework',id:h.id,t:h.title,s:sb[h.subjectId]||'',d:h.due}))
+ .concat(S.dayPlans.filter(x=>!x.done).map(x=>({k:'dayPlans',id:x.id,t:x.title,s:'Plan',d:x.date})))
+ .map(x=>Object.assign(x,{n:dl(x.d)})).filter(x=>x.n<=3&&x.n>=-3).sort((a,b)=>a.n-b.n)}
+
+function vToday(){const now=new Date(),nm=now.getHours()*60+now.getMinutes(),td=iso(now);
+ const bl=[...S.routine].sort((a,b)=>a.startMin-b.startMin),cur=bl.find(b=>cov(b,nm));
+ const pl=S.dayPlans.filter(x=>x.date==td),tk=S.tasks.filter(x=>x.scope=='DAY'&&x.period==td);
+ const tot=pl.length+tk.length,dn=pl.filter(x=>x.done).length+tk.filter(x=>x.done).length,sn=soon();
+ return `<h2 style="margin-top:4px">${now.toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</h2>
+ <div class="card cur"><div class="mu">Now (${fm(nm)})</div><b>${cur?fm(cur.startMin)+'–'+fm(cur.endMin)+'  '+esc(cur.title):'Free time'}</b></div>
+ ${tot?`<div class="mu">Today's progress: ${dn} / ${tot}</div><progress max="${tot}" value="${dn}" style="width:100%"></progress>`:''}
+ ${sn.length?'<h2>⚠ Deadlines (3 days or less)</h2>'+sn.map(x=>row(false,x.t,(x.s?x.s+' · ':'')+left(x.n),true,x.k,x.id,false)).join(''):''}
+ ${pl.length?'<h2>Plan for today</h2>'+pl.map(x=>row(x.done,x.title,'',0,'dayPlans',x.id,false)).join(''):''}
+ ${tk.length?'<h2>Daily tasks</h2>'+tk.map(x=>row(x.done,x.title,'',0,'tasks',x.id,false)).join(''):''}
+ ${!bl.length&&!tot&&!sn.length?'<p class="mu">Nothing yet. Start with the Routine or Calendar tab.</p>':''}`}
+
+function vRoutine(){const bl=[...S.routine].sort((a,b)=>a.startMin-b.startMin),nm=new Date().getHours()*60+new Date().getMinutes(),e=U.edit&&S.routine.find(b=>b.id==U.edit);
+ const fr=free(bl).map(f=>fm(f[0])+'–'+fm(f[1]==1440?0:f[1])).join(', ');
+ return `<div class="mu">${fr?'Free time: '+fr:'Free time: none (24h fully planned)'}</div>
+ <div class="card"><b>${e?'Edit activity':'Add activity'}</b><div class="form">
+ <input type="text" id="rt" placeholder="What do you do?" value="${e?esc(e.title):''}">
+ <label class="mu">From <input type="time" id="rs" value="${fm(e?e.startMin:480)}"></label>
+ <label class="mu">To <input type="time" id="re" value="${fm(e?e.endMin:540)}"></label>
+ <input type="text" id="rn" placeholder="Note (optional)" value="${e?esc(e.note||''):''}">
+ <button class="b" data-a="saveR">${e?'Save':'Add'}</button>${e?'<button class="o" data-a="cancelR">Cancel</button>':''}</div>
+ <div class="mu er">${U.msg}</div></div>
+ ${bl.length?'':'<p class="mu">No routine yet. Add what you do and when.</p>'}
+ ${bl.map(b=>`<div class="card row ${cov(b,nm)?'cur':''}"><div class="g" data-a="editR" data-i="${b.id}" style="cursor:pointer">
+ <div class="mu">${fm(b.startMin)} – ${fm(b.endMin)}${b.endMin<=b.startMin?' (next day)':''}</div><b>${esc(b.title)}</b>${b.note?`<div class="mu">${esc(b.note)}</div>`:''}</div>
+ <button class="x" data-a="del" data-k="routine" data-i="${b.id}" aria-label="Delete">×</button></div>`).join('')}`}
+
+function vCal(){const y=U.ym.getFullYear(),m=U.ym.getMonth(),off=(new Date(y,m,1).getDay()+6)%7,n=new Date(y,m+1,0).getDate(),td=iso(new Date());
+ let g=['Mo','Tu','We','Th','Fr','Sa','Su'].map(d=>`<div class="h">${d}</div>`).join('')+'<div class="h"></div>'.repeat(off);
+ for(let d=1;d<=n;d++){const k=y+'-'+p(m+1)+'-'+p(d),ps=S.dayPlans.filter(x=>x.date==k);
+  g+=`<div class="${k==U.sel?'sel':ps.length?'has':''} ${k==td?'td':''}" data-a="sel" data-i="${k}"><b>${d}</b>${ps.length?`<small>${ps.filter(x=>x.done).length}/${ps.length}</small>`:''}</div>`}
+ const sel=S.dayPlans.filter(x=>x.date==U.sel);
+ return `<div class="row sp"><button class="o" data-a="ym" data-i="-1">‹</button><b>${U.ym.toLocaleDateString(undefined,{month:'long',year:'numeric'})}</b><button class="o" data-a="ym" data-i="1">›</button></div>
+ <div class="cal" style="margin-top:8px">${g}</div>
+ <h2>To finish on ${new Date(U.sel+'T00:00:00').toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short',year:'numeric'})}</h2>
+ ${sel.map(x=>row(x.done,x.title,!x.done&&dl(x.date)>=0&&dl(x.date)<=3?left(dl(x.date)):'',true,'dayPlans',x.id,true)).join('')}
+ <div class="form"><input type="text" id="pt" placeholder="What must be finished this day?"><button class="b" data-a="addP">Add</button></div>`}
+
+function tkey(){const a=U.an;return U.sc==0?iso(a):U.sc==1?a.getFullYear()+'-'+p(a.getMonth()+1):String(a.getFullYear())}
+function vTasks(){const sc=['DAY','MONTH','YEAR'][U.sc],k=tkey(),l=S.tasks.filter(t=>t.scope==sc&&t.period==k),a=U.an;
+ const lab=U.sc==0?a.toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short',year:'numeric'}):U.sc==1?a.toLocaleDateString(undefined,{month:'long',year:'numeric'}):a.getFullYear();
+ return `<div class="tabs">${['Daily','Monthly','Yearly'].map((t,i)=>`<button class="o ${U.sc==i?'on':''}" data-a="sc" data-i="${i}">${t}</button>`).join('')}</div>
+ <div class="row sp" style="margin:10px 0"><button class="o" data-a="an" data-i="-1">‹</button><div style="text-align:center"><b>${lab}</b><div class="mu">${l.filter(t=>t.done).length} / ${l.length} done</div></div><button class="o" data-a="an" data-i="1">›</button></div>
+ ${l.map(t=>row(t.done,t.title,'',0,'tasks',t.id,true)).join('')}
+ <div class="form"><input type="text" id="tt" placeholder="New task"><button class="b" data-a="addT">Add</button></div>`}
+
+function vHw(){const dflt=iso(new Date(Date.now()+7*864e5));
+ return `${U.msg?`<div class="mu er">${esc(U.msg)}</div>`:''}<div class="form"><input type="text" id="sn" placeholder="Or type your own category" style="flex:1"><button class="b" data-a="addS">Add</button></div>
+ ${(()=>{const have=S.subjects.map(x=>x.name.toLowerCase()),l=PRESETS.filter(n=>!have.includes(n.toLowerCase()));
+ return l.length?`<div class="mu">Quick add a category:</div><div class="form">${l.map(n=>`<button class="o" data-a="preset" data-i="${esc(n)}">+ ${esc(n)}</button>`).join('')}</div>`:''})()}
+ ${S.subjects.length?'':'<p class="mu">Pick a category above (or type your own), then add homework inside it.</p>'}
+ ${S.subjects.map(s=>`<div class="row sp"><h2>${esc(s.name)}</h2><button class="x" data-a="delS" data-i="${s.id}" aria-label="Delete subject">×</button></div>
+ ${S.homework.filter(h=>h.subjectId==s.id).sort((a,b)=>a.done-b.done||a.due.localeCompare(b.due)).map(h=>{const n=dl(h.due);return row(h.done,h.title,h.done?'Done · '+h.due:h.due+' · '+left(n),!h.done&&n<=3,'homework',h.id,true,mh(h.media,'homework',h.id)+att('homework',h.id,0))}).join('')}
+ <div class="form"><input type="text" id="ht-${s.id}" placeholder="Homework" style="flex:1"><input type="date" id="hd-${s.id}" value="${dflt}"><input type="file" id="hf-${s.id}" multiple accept="${ACI}" title="Attach images (JPG, PNG, GIF, BMP)" style="width:100%"><button class="b" data-a="addH" data-i="${s.id}">Add</button></div>`).join('')}`}
+
+function vBk(){return `<h2 style="margin-top:4px">Backup file</h2>
+ <p class="mu">Data lives in this browser. Save a backup file to keep it safe if you clear the browser or switch device. The file works with the Android app too. It includes notes and trash text, but photos and videos stay in this browser only.</p>
+ <div class="form"><button class="b" data-a="exp">Export backup file</button>
+ <label class="o" style="border:1px solid var(--bd);border-radius:8px;padding:8px 12px;cursor:pointer;background:var(--card)">Import backup file<input type="file" id="imp" accept=".json,application/json" hidden></label></div>
+ ${U.pend?`<div class="card warn">Restore from <b>${esc(U.pend.name)}</b>? This replaces ALL current data.<div class="form"><button class="b" data-a="doImp">Restore</button><button class="o" data-a="noImp">Cancel</button></div></div>`:''}
+ <textarea id="raw" rows="4" placeholder="Or paste backup text here" style="margin-top:6px"></textarea>
+ <div class="form"><button class="o" data-a="pasteImp">Restore from pasted text</button><button class="o" data-a="copy">Copy backup text</button></div>
+ <div class="mu ok">${esc(U.msg)}</div>
+ <h2>Install &amp; shortcuts</h2>
+ <div class="form"><button class="b" data-a="inst" ${STANDALONE?'disabled':''}>${STANDALONE?'✓ Installed':'📲 Install app'}</button></div>
+ <p class="mu">Installed, it opens full screen from your home screen and works offline. <b>Long-press the app icon</b> to jump straight to Today, Homework, Routine, Calendar, Tasks or Notes. For a shortcut to any other tab: open that tab, then Chrome menu (⋮) → Add to Home screen. The address follows the tab you are on.</p>
+ <h2>Deadline alerts</h2><p class="mu">Items with 3 days or less left show a warning on Today. When you open the app you also get a notification. An installed app may be woken by Chrome about once a day to check (Chrome decides when, it is not guaranteed).</p>
+ <button class="o" data-a="notif">Enable notifications</button>`}
+
+// media storage (IndexedDB) -- images & videos stay in this browser
+const ACI='image/jpeg,image/png,image/gif,image/bmp,.jpg,.jpeg,.png,.gif,.bmp',MC={},L=()=>document.getElementById('lb');
+let _db;const idb=()=>_db||(_db=new Promise((res,rej)=>{const r=indexedDB.open('planner_media',1);r.onupgradeneeded=()=>r.result.createObjectStore('m');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}));
+const mput=async(id,f)=>{const d=await idb();return new Promise((res,rej)=>{const t=d.transaction('m','readwrite');t.objectStore('m').put(f,id);t.oncomplete=res;t.onerror=()=>rej(t.error)})};
+const mget=async id=>{const d=await idb();return new Promise((res,rej)=>{const r=d.transaction('m').objectStore('m').get(id);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})};
+const mdel=async id=>{try{const d=await idb();d.transaction('m','readwrite').objectStore('m').delete(id);delete MC[id]}catch(e){}};
+const durl=f=>new Promise(r=>{const x=new FileReader();x.onload=()=>r(x.result);x.onerror=()=>r(null);x.readAsDataURL(f)});
+const purge=e=>[e.item].concat(e.extra||[]).forEach(x=>(x.media||[]).forEach(m=>mdel(m.id)));
+const closeLb=()=>{L().hidden=true;L().innerHTML=''};
+const MIME={jpg:'image/jpeg',jpeg:'image/jpeg',png:'image/png',gif:'image/gif',bmp:'image/bmp'};
+async function addFiles(files,vid){const out=[];let err='';
+ for(const f of files){const ext=(f.name.split('.').pop()||'').toLowerCase(),im=!!MIME[ext]||/^image\/(jpeg|png|gif|bmp|x-ms-bmp)$/.test(f.type),vd=vid&&f.type.startsWith('video/');
+  if(!im&&!vd){err+=f.name+': unsupported file type. ';continue}
+  if(f.size>(vd?5e7:1e7)){err+=f.name+': too large (max '+(vd?'50':'10')+' MB). ';continue}
+  const id=uid(),type=im?(MIME[ext]||f.type):f.type;
+  try{await mput(id,new Blob([f],{type}));out.push({id,name:f.name,kind:im?'img':'vid',type,size:f.size})}catch(e){err+=f.name+': could not be stored in this browser. '}}
+ U.msg=err;return out}
+const mh=(l,k,id)=>l&&l.length?`<div class="med">${l.map(m=>`<div class="mi"><div class="th" data-a="open" data-m="${m.id}" data-k="${m.kind}" title="${esc(m.name)}">${m.kind=='img'?'🖼':'🎬'}</div><div class="mn">${esc(m.name)}${k?` <button class="x" style="font-size:14px;padding:0" data-a="delM" data-k="${k}" data-i="${id}" data-m="${m.id}" aria-label="Remove file">×</button>`:''}</div></div>`).join('')}</div>`:'';
+const att=(k,id,vd)=>`<label class="o sm">📎 Add ${vd?'image/video':'image'}<input type="file" hidden multiple data-t="${k}" data-i="${id}" accept="${ACI}${vd?',video/*':''}"></label>`;
+const lk=t=>esc(t).replace(/https?:\/\/[^\s<]+/g,u=>`<a href="${u}" target="_blank" rel="noopener">🔗 ${u}</a>`);
+function hydrate(){document.querySelectorAll('.th[data-m]').forEach(async el=>{if(el.dataset.k!='img')return;const id=el.dataset.m;
+ try{let u=MC[id];if(!u){const b=await mget(id);if(!b){el.textContent='❓';return}u=MC[id]=await durl(b)}el.innerHTML=`<img alt="" src="${u}">`}catch(e){}})}
+function vNotes(){return `<div class="card"><b>New note / topic</b><div class="form">
+ <input type="text" id="nt" placeholder="Topic title"><textarea id="nx" rows="3" placeholder="Note text (links become clickable)"></textarea>
+ <input type="file" id="nf" multiple accept="${ACI},video/*" style="width:100%" title="Images (JPG, PNG, GIF, BMP) and videos"><button class="b" data-a="addN">Add note</button></div>
+ <div class="mu er">${esc(U.msg)}</div><div class="mu">Images up to 10 MB, videos up to 50 MB.</div></div>
+ ${S.notes.length?'':'<p class="mu">No notes yet.</p>'}
+ ${[...S.notes].reverse().map(n=>`<div class="card"><div class="row sp"><b>${esc(n.title)}</b><button class="x" data-a="del" data-k="notes" data-i="${n.id}" aria-label="Delete">×</button></div>
+ <div style="white-space:pre-wrap;overflow-wrap:anywhere">${lk(n.text||'')}</div>${mh(n.media,'notes',n.id)}${att('notes',n.id,1)}</div>`).join('')}`}
+const KL={routine:'Routine',dayPlans:'Plan',tasks:'Task',homework:'Homework',subjects:'Subject',notes:'Note'};
+function vTrash(){const l=[...S.trash].reverse();
+ return `<p class="mu">Deleted items are kept here until you delete them forever. Nothing is removed automatically.</p>${U.msg?`<div class="mu er">${esc(U.msg)}</div>`:''}
+ ${l.length?'<button class="o" data-a="empty">Empty trash</button>':'<p class="mu">Trash is empty.</p>'}
+ ${l.map(e=>`<div class="card"><b>${esc(e.item.title||e.item.name||'Item')}</b><div class="mu">${KL[e.kind]||e.kind} · deleted ${new Date(e.at).toLocaleDateString()}${e.extra&&e.extra.length?' · with '+e.extra.length+' homework':''}</div>${mh(e.item.media)}
+ <div class="form"><button class="b" data-a="restore" data-i="${e.tid}">Restore</button><button class="o" data-a="purge" data-i="${e.tid}">Delete forever</button></div></div>`).join('')}`}
+function render(){
+ $nav.innerHTML=TABS.map(t=>`<button class="${tab==t[0]?'on':''}" data-a="tab" data-i="${t[0]}">${t[1]}</button>`).join('');
+ const fr=U.fresh;U.fresh=0;$m.innerHTML=({today:vToday,routine:vRoutine,cal:vCal,tasks:vTasks,hw:vHw,notes:vNotes,trash:vTrash,bk:vBk})[tab]();hydrate();if(fr){[...$m.children].forEach((e,i)=>e.style.animationDelay=Math.min(i,14)*45+'ms');$m.classList.add('fresh');clearTimeout(render.t);render.t=setTimeout(()=>$m.classList.remove('fresh'),1400)}}
+const $nav=document.getElementById('nav'),$m=document.getElementById('m'),v=id=>{const e=document.getElementById(id);return e?e.value.trim():''};
+function restore(txt){try{const d=JSON.parse(txt),n=E();for(const k in n)if(!Array.isArray(d[k]))d[k]=[];
+ S=Object.assign(E(),{routine:d.routine,dayPlans:d.dayPlans,tasks:d.tasks,subjects:d.subjects,homework:d.homework,notes:d.notes,trash:d.trash});save();U.pend=null;U.msg='Data restored.'}catch(e){U.msg='Invalid backup file. Nothing changed.'}render()}
+const dump=()=>JSON.stringify(Object.assign({version:1},S),null,2);
+
+document.addEventListener('click',async ev=>{if(ev.target.id=='lb'){closeLb();return}const t=ev.target.closest('[data-a]');if(!t)return;const a=t.dataset.a,i=t.dataset.i,k=t.dataset.k;
+ if(a=='tab'){tab=i;try{history.replaceState(null,'','?tab='+i)}catch(e){}U.fresh=1;window.scrollTo({top:0,behavior:'smooth'});U.msg='';U.edit=null}
+ else if(a=='tg'){const o=S[k].find(x=>x.id==i);if(o)o.done=!o.done;save()}
+ else if(a=='del'){const it=S[k].find(x=>x.id==i);if(it){S.trash.push({tid:uid(),kind:k,item:it,at:Date.now()});S[k]=S[k].filter(x=>x.id!=i)}if(U.edit==i)U.edit=null;save()}
+ else if(a=='saveR'){const s=tm(v('rs')||'00:00'),e=tm(v('re')||'00:00'),ti=v('rt');
+  if(!ti||s==e){U.msg=!ti?'Enter what you do.':'Start and end must be different.'}
+  else{const b={id:U.edit||uid(),startMin:s,endMin:e,title:ti,note:v('rn')},cl=S.routine.filter(x=>x.id!=b.id&&ovl(x,b));
+   S.routine=S.routine.filter(x=>x.id!=b.id).concat(b);U.edit=null;U.msg=cl.length?'Saved. Overlaps with: '+cl.map(x=>x.title).join(', '):'';save()}}
+ else if(a=='editR'){U.edit=i;U.msg=''}else if(a=='cancelR'){U.edit=null;U.msg=''}
+ else if(a=='sel')U.sel=i;
+ else if(a=='ym')U.ym=new Date(U.ym.getFullYear(),U.ym.getMonth()+ +i,1);
+ else if(a=='addP'){if(v('pt')){S.dayPlans.push({id:uid(),date:U.sel,title:v('pt'),done:false});save()}}
+ else if(a=='sc')U.sc=+i;
+ else if(a=='an'){const d=U.an,n=+i;U.an=U.sc==0?new Date(d.getFullYear(),d.getMonth(),d.getDate()+n):U.sc==1?new Date(d.getFullYear(),d.getMonth()+n,1):new Date(d.getFullYear()+n,0,1)}
+ else if(a=='addT'){if(v('tt')){S.tasks.push({id:uid(),title:v('tt'),scope:['DAY','MONTH','YEAR'][U.sc],period:tkey(),done:false});save()}}
+ else if(a=='addS'){if(v('sn')){S.subjects.push({id:uid(),name:v('sn')});save()}}
+ else if(a=='preset'){if(!S.subjects.some(x=>x.name.toLowerCase()==i.toLowerCase())){S.subjects.push({id:uid(),name:i});save()}}
+ else if(a=='delS'){const sb=S.subjects.find(x=>x.id==i);if(sb){S.trash.push({tid:uid(),kind:'subjects',item:sb,extra:S.homework.filter(x=>x.subjectId==i),at:Date.now()});S.subjects=S.subjects.filter(x=>x.id!=i);S.homework=S.homework.filter(x=>x.subjectId!=i);save()}}
+ else if(a=='addN'){if(v('nt')||v('nx')){const fl=document.getElementById('nf'),md=await addFiles([...fl.files],true);S.notes.push({id:uid(),title:v('nt')||'Untitled',text:v('nx'),media:md,at:Date.now()});save()}}
+ else if(a=='delM'){const it=S[k].find(x=>x.id==i);if(it){it.media=(it.media||[]).filter(m=>m.id!=t.dataset.m);mdel(t.dataset.m);save()}}
+ else if(a=='open'){const b=await mget(t.dataset.m).catch(()=>null);if(!b){U.msg='File missing: photos and videos are stored only in the browser where they were added.';render();return}
+  const u=MC[t.dataset.m]||await durl(b);L().innerHTML='<button class="o" data-a="close" style="position:absolute;top:calc(env(safe-area-inset-top,0px) + 10px);right:12px">✕ Close</button>'+(t.dataset.k=='img'?`<img alt="" src="${u}">`:`<video src="${u}" controls autoplay playsinline></video>`);L().hidden=false;return}
+ else if(a=='close'){closeLb();return}
+ else if(a=='restore'){const e=S.trash.find(x=>x.tid==i);if(e){if(e.kind=='homework'&&!S.subjects.some(x=>x.id==e.item.subjectId))U.msg='Restore its subject first.';else{S[e.kind].push(e.item);if(e.extra)S.homework.push(...e.extra);S.trash=S.trash.filter(x=>x.tid!=i);U.msg='';save()}}}
+ else if(a=='purge'){const e=S.trash.find(x=>x.tid==i);if(e){purge(e);S.trash=S.trash.filter(x=>x.tid!=i);save()}}
+ else if(a=='empty'){S.trash.forEach(purge);S.trash=[];save()}
+ else if(a=='addH'){if(v('ht-'+i)&&v('hd-'+i)){const fl=document.getElementById('hf-'+i),md=await addFiles([...(fl?fl.files:[])],false);S.homework.push({id:uid(),subjectId:i,title:v('ht-'+i),due:v('hd-'+i),done:false,media:md});save()}}
+ else if(a=='exp'){try{let d=null;if(window.claude&&claude.use)d=await claude.use('downloads');if(d)await d.save({filename:'planner-backup.json',data:dump()});
+  else{const u=URL.createObjectURL(new Blob([dump()],{type:'application/json'})),l=document.createElement('a');l.href=u;l.download='planner-backup.json';document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),3000)}
+  U.msg='Backup file saved.'}catch(e){U.msg='Save cancelled. You can use "Copy backup text" instead.'}}
+ else if(a=='copy'){const r=document.getElementById('raw');r.value=dump();r.select();try{await navigator.clipboard.writeText(r.value);U.msg='Backup text copied. Paste it into a file or note.'}catch(e){U.msg='Select the text above and copy it manually.'}
+  document.getElementById('raw').value=r.value;const keep=r.value;render();document.getElementById('raw').value=keep;return}
+ else if(a=='pasteImp'){U.pend={name:'pasted text',txt:v('raw')}}
+ else if(a=='doImp'){restore(U.pend.txt);return}else if(a=='noImp')U.pend=null;
+ else if(a=='inst'){if(DP){DP.prompt();try{const r=await DP.userChoice;U.msg=r.outcome=='accepted'?'Installing…':'Install cancelled.'}catch(e){}DP=null;document.getElementById('inst').hidden=true}
+  else U.msg='Open the Chrome menu (⋮) and choose "Install app" or "Add to Home screen".'}
+ else if(a=='notif'){try{const r=await Notification.requestPermission();U.msg=r=='granted'?'Notifications enabled.':'Notifications not allowed.';if(r=='granted'){alert_();regP()}}catch(e){U.msg='Notifications are not supported here.'}}
+ render()});
+document.addEventListener('change',async ev=>{const e=ev.target;if(e.id=='imp'&&e.files[0]){const f=e.files[0],r=new FileReader();r.onload=()=>{U.pend={name:f.name,txt:String(r.result)};render()};r.readAsText(f)}
+ else if(e.dataset&&e.dataset.t&&e.files.length){const it=S[e.dataset.t].find(x=>x.id==e.dataset.i);if(it){const a=await addFiles([...e.files],e.dataset.t=='notes');it.media=(it.media||[]).concat(a);save();render()}}});
+async function alert_(){try{if(Notification.permission!='granted')return;const l=localStorage.getItem('planner_n'),td=iso(new Date());if(l==td)return;const s=soon();if(!s.length)return;
+ const o={body:s.slice(0,3).map(x=>x.t+' – '+left(x.n)).join('\n'),icon:'icon-192.png',badge:'icon-192.png',tag:'deadlines'},ti=s.length+' deadline(s) within 3 days',reg=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration();
+ if(reg)await reg.showNotification(ti,o);else new Notification(ti,o);localStorage.setItem('planner_n',td)}catch(e){}}
+async function regP(){try{const reg=await navigator.serviceWorker.ready;if(reg.periodicSync)await reg.periodicSync.register('deadlines',{minInterval:12*36e5})}catch(e){}}
+
+// galaxy background: parallax stars, shooting stars, scroll-driven black hole + progress bar
+(function(){const c=document.getElementById('sky'),x=c.getContext('2d'),bh=document.querySelector('.bh'),sp=document.getElementById('sp'),
+ rm=matchMedia('(prefers-reduced-motion:reduce)').matches;let W,H,st=[],sy=0,sh=null,nx=0;
+ function init(){W=c.width=innerWidth;H=c.height=innerHeight;st=Array.from({length:Math.min(280,Math.floor(W*H/6000))},()=>({x:Math.random()*W,y:Math.random()*H,z:Math.random()*.9+.1,p:Math.random()*6.28,h:Math.random()<.25?200:Math.random()<.35?285:0}))}
+ function frame(t){x.clearRect(0,0,W,H);
+  for(const s of st){const y=((s.y-sy*s.z*.45)%H+H)%H,a=.3+.7*Math.abs(Math.sin(t/1100*s.z+s.p));
+   x.fillStyle=`hsla(${s.h||230},${s.h?95:25}%,90%,${a})`;x.beginPath();x.arc(s.x,y,s.z*1.5+.2,0,6.283);x.fill()}
+  if(!rm){if(!sh&&t>nx){sh={x:Math.random()*W,y:Math.random()*H*.5,l:0};nx=t+4000+Math.random()*6000}
+   if(sh){sh.l+=14;sh.x-=11;sh.y+=6;const g=x.createLinearGradient(sh.x,sh.y,sh.x+sh.l,sh.y-sh.l*.55);g.addColorStop(0,'rgba(255,255,255,.95)');g.addColorStop(1,'rgba(255,255,255,0)');
+    x.strokeStyle=g;x.lineWidth=2;x.beginPath();x.moveTo(sh.x,sh.y);x.lineTo(sh.x+sh.l,sh.y-sh.l*.55);x.stroke();if(sh.l>260||sh.x<-300)sh=null}
+   requestAnimationFrame(frame)}}
+ function scroll(){sy=scrollY;const m=document.documentElement.scrollHeight-innerHeight;sp.style.width=(m>0?sy/m*100:0)+'%';
+  bh.style.transform=`translate(${-sy*.05}px,${sy*.22}px) rotate(${sy*.1}deg) scale(${1+Math.min(sy/2400,.5)})`;if(rm)frame(0)}
+ addEventListener('scroll',scroll,{passive:true});addEventListener('resize',()=>{init();scroll()});init();scroll();requestAnimationFrame(frame)})();
+let DP=null;const STANDALONE=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();DP=e;if(!STANDALONE)document.getElementById('inst').hidden=false;if(tab=='bk')render()});
+addEventListener('appinstalled',()=>{DP=null;document.getElementById('inst').hidden=true;U.msg='App installed.';render()});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+mirror();
+U.fresh=1;render();alert_();setInterval(()=>{if(tab=='today'&&!document.activeElement.matches('input,textarea'))render()},60000);
+</script></body></html>
